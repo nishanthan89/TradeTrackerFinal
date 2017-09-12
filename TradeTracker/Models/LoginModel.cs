@@ -19,5 +19,6 @@ namespace TradeTracker.Models
         [Required]
         [DataType(DataType.Password)]
         public string RePassword { get; set; }
+
     }
 }

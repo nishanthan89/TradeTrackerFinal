@@ -13,7 +13,7 @@ namespace TradeBLL.Controllers
     public class LoginController : Controller
     {
        // Login loginService = new Login();
-        public ActionResult Login(Models.LoginBLL login)
+        public string Login(Models.LoginBLL login)
         {
             //TradeTrackerService.Login loginService = new TradeTrackerService.Login();
 
@@ -23,8 +23,11 @@ namespace TradeBLL.Controllers
             loginDal.Password = login.Password;
 
 
-            loginService.GetLoginDetail(loginDal);
-            return View();
+           string loginResult= loginService.GetLoginDetail(loginDal);
+           return loginResult;
+           //return View();
+           //TempData["result"] = loginResult;
+           //return RedirectToAction("Login", "Home", loginResult);
         }
 
         public ActionResult Register(Models.LoginBLL register) 

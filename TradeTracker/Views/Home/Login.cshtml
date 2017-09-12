@@ -78,7 +78,6 @@
                             </div>
                            
                         </div>
-
                         <!-- /.col -->
                     </div>
 
@@ -88,7 +87,27 @@
             
         </div>
     </div> <!-- ./Login body-->
+    @*<script>alert("hi")</script>*@
 
+
+    @if (@ViewBag.LoginResult != null)
+    {
+        
+        <script><p class="alert alert-success" id="successMessage">@ViewBag.LoginResult</p></script>
+       
+        @*<script type="text/javascript">
+            $(function () {
+                alert(s)
+            });
+        </script>*@
+
+    }
+    else
+    {
+
+    }
+
+    <h3>@ViewBag.LoginResult</h3>
     <!-- jQuery 3 -->
     <script src="~/Scripts/jquery-3.1.1.min.js"></script>
     <!-- Bootstrap 3.3.7 -->
@@ -96,7 +115,6 @@
     <!-- iCheck -->
     <script src="~/Scripts/icheck.min.js"></script>
 
-
-
 </body>
+
 </html>

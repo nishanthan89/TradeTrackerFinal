@@ -19,8 +19,8 @@ namespace TradeBLL.TradeTrackerService
         public string GetLoginDetail(loginDALModel loginDetail)
         {
 
-            UserDAL.AddUserDetails(loginDetail);
-            throw new NotImplementedException();
+            string loginResult = UserDAL.AddUserDetails(loginDetail);
+            return loginResult;
         }
 
 

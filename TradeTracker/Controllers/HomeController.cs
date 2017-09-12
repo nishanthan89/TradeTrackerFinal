@@ -1,23 +1,57 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using TradeBLL.Models;
+using TradeTracker.Models;
 
 namespace TradeTracker.Controllers
 {
     public class HomeController : Controller
     {
         // GET: Home
-        public ActionResult Index()
+        public ActionResult Index(string NIC)
         {
-            return View();
+
+            if (Session["loginUser"] == null)
+            {
+
+                // return Redirect("Index");
+                return RedirectToAction("Login", "Home");
+            }
+            else
+            {
+                ViewBag.LoginUser = NIC;
+                return View();
+            }
+
+
+
+            //HttpCookie logincookie = new HttpCookie(logincookie);
+            //logincookie.Value = login.NIC;
+           // string userName = login.NIC;
+           // string userName = logincookie.Value;
+           // ViewBag.LoginUser = userName;
+           // ViewBag.LoginUser = HttpContext.User.Identity.Name;
+            //return View();
         }
 
         [HttpGet]
         public ActionResult Login()
         {
-            return View();
+            if(Session["loginUser"]!=null)
+            {
+
+               // return Redirect("Index");
+                return RedirectToAction("Index", "Home", new { NIC = Session["loginUser"].ToString()});
+            }
+            else
+            {
+                return View();
+            }
+           
         }
         [HttpGet]
         public ActionResult SignUp()
@@ -26,19 +60,37 @@ namespace TradeTracker.Controllers
         }
 
         [HttpPost]
+        public string showLoginUser(Models.LoginModel login) 
+        {
+            string userName = login.NIC;
+            ViewBag.LoginUser = userName;
+            return ViewBag.LoginUser;
+        }
+
+        [HttpPost]
         public ActionResult Login(Models.LoginModel login)
         {
+           // Task t = new Task();
+            Session["loginUser"] = login.NIC;
            
             TradeBLL.Controllers.LoginController loginbll = new TradeBLL.Controllers.LoginController();
             TradeBLL.Models.LoginBLL loginmodel = new TradeBLL.Models.LoginBLL();
 
-            loginmodel.Id = login.Id;
+          //  loginmodel.Id = login.Id;
             loginmodel.NIC = login.NIC;
             loginmodel.Password = login.Password;
+            string logdta = loginbll.Login(loginmodel).ToString();
 
-            loginbll.Login(loginmodel);
 
-            return View();
+            ViewBag.LoginResult = logdta;
+            if (logdta == "Successfully login")
+            {
+                //return Redirect("Index");
+                return RedirectToAction("Index", "Home", new { NIC = Session["loginUser"].ToString() });
+            }
+            else {
+                return Redirect("Login");
+            } 
         }
 
         public ActionResult SignUp(Models.LoginModel registerUser)
@@ -68,76 +120,6 @@ namespace TradeTracker.Controllers
         }
 
 
-        // GET: Home/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: Home/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Home/Create
-        [HttpPost]
-        public ActionResult Create(FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Home/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: Home/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Home/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: Home/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        
     }
 }
